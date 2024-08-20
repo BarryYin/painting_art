@@ -18,6 +18,7 @@ from audiorecorder import audiorecorder
 from dwspark.models import Audio2Text
 from modify_mp3 import modify_mp3_file
 from dwspark.config import Config
+import base64
 # 加载系统环境变量：SPARKAI_APP_ID、SPARKAI_API_KEY、SPARKAI_API_SECRET
 config = Config('3a115b20', '9d1b7a738c3e63a79656df4222d12cef','ZGMyMzA3MGFlM2MzM2UxZWE1YTJhYjgw')
 
@@ -48,6 +49,7 @@ def main():
     
     if selected2 == "法国绘画作品":
         st.session_state.page = '法国绘画作品'
+        # 添加居中且加粗的标题
         # 添加居中且加粗的标题
         st.markdown("<h1 style='text-align: center; font-weight: bold;'>法国绘画300年</h1>", unsafe_allow_html=True)
         st.markdown("<h3 style='text-align: center; font-weight: normal;'>与AI一起学习法国绘画历史</h1>", unsafe_allow_html=True)
@@ -105,6 +107,11 @@ def main():
     elif selected2 == "绘画故事":
         st.session_state.page = '绘画故事'
         
+        st.markdown("<h1 style='text-align: center; font-weight: bold;'>法国绘画300年</h1>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-weight: normal;'>与AI一起学习法国绘画历史</h1>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-weight: normal;'>选择一副名画，让AI重新解读，形成新的绘本故事<br/></h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='text-align: center; font-weight: bold;'></h1>", unsafe_allow_html=True)
+        # load data
 
         if 'question_1' not in st.session_state:
                 st.session_state['question_1'] = ""
@@ -118,17 +125,10 @@ def main():
         #使用循环将drawing_names中的每个值添加到新列表中
         for name in st.session_state['data_1']['drawing_name']:
             new_list.append(name)
-        # 在expander下方增加一个下拉框，让用户从一批问题中选择
-        # questions = ["莫奈的故事", "高更的故事", "梵高的绘画风格", "法国浪漫主义绘画"]
-        # selected_question = st.selectbox("请选择你感兴趣的问题：", questions)
-                
-        #questions = ["《自由引导人民》的艺术赏析", "莫奈《睡莲》的艺术赏析", "梵高《向日葵》的故事", "让·安东尼·华多《小丑》的故事"]
-        questions = new_list
-        selected_question = st.selectbox("请选择你感兴趣的问题：", questions)
 
-        drawing_url = ''
-        Works_analysis = ''
-        story = ''
+        questions = new_list
+        selected_question = st.selectbox("请选择一副名画作品：", questions)
+
 
         if 'drawing_url' not in st.session_state:
                 st.session_state['drawing_url'] = ""
@@ -149,34 +149,73 @@ def main():
                 st.session_state['story'] = row['story']
                 break  # 匹配成功后退出循环
 
+        # 假设你的 MP3 文件的 URL 是 'http://example.com/my_audio.mp3'
+        audio_url = 'output_20240820132046.mp3'
+        # 将你的 MP3 文件读取为二进制数据
+        def convert_mp3_to_base64(mp3_file_path):
+            with open(mp3_file_path, "rb") as mp3_file:
+                # 读取文件内容
+                mp3_data = mp3_file.read()
+                # 转换为 Base64 编码的字符串
+                base64_mp3 = base64.b64encode(mp3_data).decode('utf-8')
+                return base64_mp3
+            
+        base64_mp3 = convert_mp3_to_base64(audio_url)
+
         st.session_state['answer_01'] = True
         st.session_state['question_1'] = selected_question
         if st.session_state['answer_01']:
-
-            with st.expander("关于这部作品的赏析原文"):
-            # 在这里，你可以根据用户的输入显示不同的内容
-            # 例如，简单地回显用户输入的内容
-                st.write(f"你输入的内容是：{st.session_state['Works_analysis']}")
-            col1, col2 = st.columns([1,1]) 
+            col1, col2, col3 = st.columns([3,0.1,3]) 
             with col1:
-                st.image(st.session_state['drawing_url'], width=500)
+                st.markdown("""
+                <style>
+                .container {
+                        width: 530px;
+                }
+                </style>
+                """, unsafe_allow_html=True)
+                with st.container():
+                        st.image(st.session_state['drawing_url'])
+                        st.markdown("""
+                        <style>
+                        .css-1x0zj2k {
+                        max-width: 20%;
+                        }
+                        </style>
+                        """, unsafe_allow_html=True)
+                        with st.expander("关于这部作品的赏析原文"):
+                            st.write(f"{st.session_state['Works_analysis']}")
+                                
             with col2:
+                st.markdown('''
+                <style>
+                    .divider {
+                        border-left: 2px solid #ccc;
+                        height: 100vh;
+                    }
+                </style>
+                <div class="divider"></div>
+                ''', unsafe_allow_html=True)
+            with col3:
+                # 使用 st.markdown 来嵌入 HTML 代码，其中包含一个 audio 标签用于播放 MP3 文件
+                st.markdown(f"""
+                <audio controls>
+                        <source src="data:audio/mp3;base64,{base64_mp3}" type="audio/mp3">
+                        Your browser does not support the audio element.
+                        <br/>
+                </audio>
+                """, unsafe_allow_html=True)
                 st.write(st.session_state['story'])
-                #process_text(st.session_state['story'])
-                #st.write(Org_tex(st.session_state['question_1']))
-                #st.write(llm_write(st.session_state['question_1']))
             st.session_state['answer_01'] = False
     
     elif selected2 == "绘画解读":
         st.session_state.page = '绘画解读'
         if "messages" not in st.session_state:
-                st.session_state["messages"] = []
-        # 假设有一个函数用于显示大师的界面
+                        st.session_state["messages"] = []
+        # # 假设有一个函数用于显示大师的界面
         def show_master_page(master_name):
             st.header(f"{master_name}的界面")
-            # 这里可以添加更多关于大师的信息和交互
 
-        
         st.markdown(
             """
             <style>
@@ -189,35 +228,41 @@ def main():
             unsafe_allow_html=True
         )
 
-        # 创建侧边栏
-        st.sidebar.title("大师列表")
-
         # 大师名单
         masters = ["莫奈", "毕加索", "梵高"]
         master_images = {
-            "莫奈": "https://sf-maas-uat-prod.oss-cn-shanghai.aliyuncs.com/outputs/f3a57a1e-2305-449a-add7-7e76390729cf_00001_.png",  # 假设图片文件名与大师名字对应
-            "毕加索": "https://sf-maas-uat-prod.oss-cn-shanghai.aliyuncs.com/outputs/f3a57a1e-2305-449a-add7-7e76390729cf_00001_.png",
-            "梵高": "https://sf-maas-uat-prod.oss-cn-shanghai.aliyuncs.com/outputs/f3a57a1e-2305-449a-add7-7e76390729cf_00001_.png"
+            "莫奈": "https://p3.itc.cn/q_70/images03/20220901/26f1a0107f59484e85d599941e78a1fa.jpeg",  # 假设图片文件名与大师名字对应
+            "毕加索": "http://p1.img.cctvpic.com/cportal/img/2018/10/24/1540391373232_826_624x856.jpg",
+            "梵高": "https://picx.zhimg.com/70/v2-3a81fde094b9c08452758beb28a44fc8_1440w.avis?source=172ae18b&biz_tag=Post"
         }
 
         # 初始化对话状态
         if 'current_master' not in st.session_state:
             st.session_state['current_master'] = '莫奈'  # 默认与莫奈对话
+        # 初始化对话状态
+        if 'userinput' not in st.session_state:
+            st.session_state['userinput'] = 0 # 默认与莫奈对话
 
-        # 为每个大师创建按钮，并检测哪个按钮被点击
-        for master in masters:
-            if st.sidebar.button(master):
-                st.session_state['current_master'] = master  # 更新当前对话的大师
+        with st.sidebar:
+            # 创建侧边栏
+            st.sidebar.title("大师列表")
+            # 创建侧边栏单选按钮以选择大师
+            current_master = st.sidebar.radio("选择一位大师进行对话", masters)
+            # 更新 session_state 中的当前大师
+            st.session_state['current_master'] = current_master 
+            # 显示当前选择的大师的图片
+            st.image(master_images[current_master], width=280)
 
-        # 注意：这里使用的图片URL需要替换为实际的图片地址。
-        # 如果图片存储在本地，你可能需要使用Streamlit的静态文件夹或者其他方法来提供图片的URL。
-        # 根据当前对话的大师显示对应界面
-        show_master_page(st.session_state['current_master'])
+        
+        st.subheader("当前对话" + st.session_state['current_master'])
+        st.write("你好，我是"+st.session_state['current_master']+"，很高兴能和你对话")
         for msg in st.session_state.messages:
                 st.chat_message(msg["role"]).write(msg["content"])
+
         # 原有的聊天逻辑
         if prompt := st.chat_input():
             st.chat_message("user").write(prompt)
+            st.session_state['userinput'] = st.session_state['userinput'] + 1
             st.session_state.messages.append({"role": "user", "content": prompt})
             msg = talkwithboss(st.session_state['current_master'],prompt)
             st.session_state.messages.append({"role": "assistant", "content": msg})
@@ -225,6 +270,14 @@ def main():
 
     elif selected2 == "绘画风格":
         st.session_state.page = '绘画风格'
+
+
+        st.markdown("<h1 style='text-align: center; font-weight: bold;'>法国绘画300年</h1>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-weight: normal;'>与AI一起学习法国绘画历史</h1>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-weight: normal;'>输入你想要绘画的主题、选择绘画流派或者绘画大师分风格，AI模拟作画<br/></h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='text-align: center; font-weight: bold;'></h1>", unsafe_allow_html=True)
+        # load data
+
         # 创建左右两列
         col1, col2 = st.columns(2)
 
@@ -254,19 +307,22 @@ def main():
                 #pills_options = pills("Label", ["莫奈的故事", "高更的故事", "梵高的绘画风格"], ["🍀", "🎈", "🌈"])
                 pills_options = ""
             username_input = st.text_input("请输入你的签名：")
-
             # 显示二级pills的内容
             #pills_choice = st.radio("请选择一个药丸：", pills_options)
-            generate_button = st.button("生成图片")
             st.session_state['prompt_image']  = promptajust(user_input,pills_options,username_input)
-            st.write(st.session_state['prompt_image'])
+            #st.write(st.session_state['prompt_image'])
+            with st.expander("自动生成的Prompt"):
+            # 在这里，你可以根据用户的输入显示不同的内容
+            # 例如，简单地回显用户输入的内容
+                st.write(f"{st.session_state['prompt_image']}")
+            generate_button = st.button("生成图片")
 
         # 在右列中显示出图界面
         with col2:
             # 创建一个空的占位符
             placeholder = st.empty()
             placeholder.markdown("""
-            <div style="border: 2px solid #4CAF50; border-radius: 5px; height: 200px; display: flex; justify-content: center; align-items: center;">
+            <div style="border: 2px solid  #808080; border-radius: 5px; height: 500px; display: flex; justify-content: center; align-items: center;">
                 <h3>图像生成区</h3>
             </div>
             """, unsafe_allow_html=True)
@@ -276,26 +332,16 @@ def main():
                 #     st.write("图片生成中，请稍候...")
                 #     # 调用生成图片的函数
                 # 直接使用placeholder.markdown更新内容为“图片生成中，请稍候...”
+                
                 placeholder.markdown("""
-                <div style="border: 2px solid #4CAF50; border-radius: 5px; height: 200px; display: flex; justify-content: center; align-items: center;">
+                <div style="border: 2px solid #4CAF50; border-radius: 5px; height: 800px; display: flex; justify-content: center; align-items: center;">
                     <h3>图片生成中，请稍候...</h3>
                 </div>
                 """, unsafe_allow_html=True)
                 image_url = create_iamge(st.session_state['prompt_image'],size_option)  # 生成图片
                 # 图片生成完成后，使用placeholder.markdown显示生成的图片
                 placeholder.image(image_url, caption="生成的图片")
-                    # placeholder.empty()  # 清空占位符中的内容
-                    # # 显示生成的图片
-                    # st.image(image_url, caption="生成的图片")  # 显示图片
 
-
-        # 展示画廊
-        # image_info_df = get_images_from_excel()
-        # if not image_info_df.empty:
-        #     st.write("画廊")
-        #     for index, row in image_info_df.iterrows():
-        #         st.image(row['imageURL'], caption=f"{row['user']} - {row['savetime']}")
-                
 
         # 在上部分和画廊之间加一条分隔线
         st.markdown("---")
@@ -312,33 +358,11 @@ def main():
         image_info_df = get_images_from_excel()
         if not image_info_df.empty:
             st.write("画廊")
-            # 使用Streamlit展示图片
-            # for index, row in image_info_df.iterrows():  # 正确迭代DataFrame的每一行
-            #     size_str = row["size"]  # 使用行数据
-            #     display_width = get_display_width(size_str)
-            #     #st.image(row["imageURL"], width=display_width)
-            #     # 在图片下方展示用户和保存时间信息
-            #     caption = f"{row['user']} - {row['savetime']}"
-            #     st.image(row["imageURL"], width=display_width, caption=caption)
-            # 计算需要多少行来展示所有图片
+
             rows = (len(image_info_df) + 2) // 3  # 每行三幅图，计算需要多少行
 
             for i in range(rows):
-                # cols = st.columns(3)  # 创建三列
-                # for j in range(3):
-                #     # 计算当前行的图片索引
-                #     img_index = i * 3 + j
-                #     if img_index < len(image_info_df):
-                #         row = image_info_df.iloc[img_index]
-                #         size_str = row["size"]
-                #         display_width = get_display_width(size_str)  # 获取每张图片的显示宽度
-                #         caption = f"{row['user']} - {row['savetime']}"  # 在图片下方展示用户和保存时间信息
-                #         # 在对应的列中显示图片，并设置宽度
-                #         cols[j].image(row["imageURL"], width=display_width, caption=caption)
-                #         # 为每个图片组件生成一个唯一的key
-                #         # unique_key = f"image_{img_index}"
-                #         # # 在对应的列中显示图片，并设置宽度，确保每个图片都有一个唯一的key
-                #         # cols[j].image(row["imageURL"], width=display_width, caption=caption, key=unique_key)
+
                 cols = st.columns([1, 0.1, 1, 0.1, 1])  # 创建三列，并在每两列图片之间添加一个较小的空列作为间隔
                 for j in range(3):
                     img_index = i * 3 + j
@@ -353,19 +377,30 @@ def main():
     else:
         st.session_state.page = '获得证书'
 
-        st.markdown("""
+        def get_image_base64(image_path):
+            with open(image_path, "rb") as image_file:
+                return base64.b64encode(image_file.read()).decode()
+
+
+        st.markdown("<h1 style='text-align: center; font-weight: bold;'>法国绘画300年特展</h1>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-weight: normal;'></h1>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-weight: normal;'>回答对10道题，可以获得证书<br/></h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='text-align: center; font-weight: bold;'></h1>", unsafe_allow_html=True)
+
+        # 获取图片的 Base64 编码字符串
+        image_base64 = get_image_base64("standing.jpeg")
+
+        # col1, col2, col3 = st.columns([1,2,1])  # 调整比例以更好地居中
+        # with col2:
+
+        st.markdown(f"""
             <div style="text-align: center;">
-                <h4>一站到底</h4>
-            </div>
-                    """, unsafe_allow_html=True)
-
-        col1, col2, col3 = st.columns([1,2,1])  # 调整比例以更好地居中
-
-        # 在中间列显示图像
-        with col2:
-            #st.image("path/to/your/image.png")  # 替换为您的图像路径
-            #st.image("standing.png", caption="",width=350)
-            st.write("法国考试")
+                <img src="data:image/jpeg;base64,{image_base64}" alt="图片" style="width: 600px;">
+                <br />
+                <br />
+        </div>
+                """, unsafe_allow_html=True)
+        
 
         if 'answer' not in st.session_state:
             st.session_state['answer'] = ''
@@ -392,29 +427,34 @@ def main():
             elif st.session_state['is_win'] == 1:
                 st.write("你赢的了一站到底英雄的头衔")
             else:
-                if st.session_state['n'] < 5:
-                    question_and_answer = get_question(st.session_state['n'])
-                    question = question_and_answer["question"]
-                    answer = question_and_answer["answer"]      
-                    print(question)
-                    st.markdown(f"""
-                        <div style="text-align: center;">
-                            <p>{question}</p>
-                            <h4>语音答题请点击</h4>
-                        </div>
-                    """, unsafe_allow_html=True)
-
-                    if st.session_state['voice_triggered']:
-                        process_text(question)
-                    #answer = "苹果的创办者是乔布斯" 
-                    st.session_state['voice_triggered'] = False
+                # 使用 Streamlit 的 columns 方法创建三列
                 
-
-                    # 使用 Streamlit 的 columns 方法创建三列
-                    col1, col2, col3 = st.columns([2,1,2])  # 调整比例以更好地居中
+                
+                if st.session_state['n'] < 5:
+                    col1, col2= st.columns([1,1])  # 调整比例以更好地居中
+                    with col1:
+                        question_and_answer = get_question(st.session_state['n'])
+                        question = question_and_answer["question"]
+                        answer = question_and_answer["answer"]      
+                        print(question)
+                        st.markdown(f"""
+                            <div >
+                                <p>{question}</p>
+                                
+                            </div>
+                        """, unsafe_allow_html=True)
+                        if st.session_state['voice_triggered']:
+                            process_text(question)
+                        #answer = "苹果的创办者是乔布斯" 
+                        st.session_state['voice_triggered'] = False
 
                     # 在中间列添加 audiorecorder 组件
                     with col2:
+                        st.markdown(f"""
+                            <div style="text-align: center;">
+                                <h4>语音答题请点击</h4>
+                            </div>
+                        """, unsafe_allow_html=True)
                         audio = audiorecorder("开始答题", "结束答题")
                         if len(audio) > 0:
                             # To play audio in frontend:
@@ -473,19 +513,18 @@ def main():
                     
             
         else:
-            #col1, col2, col3 = st.columns([1,2,1])  # 调整比例以更好地居中
+            col1, col2, col3 = st.columns([1,2,1])  # 调整比例以更好地居中
 
             # 在中间列显示图像
-            #with col2:
-            if st.button("开始吧"):
-                st.session_state['start'] = 1
-                st.rerun()
-            else:
-                st.markdown("""
-                    <div style="text-align: center;">
-                        <p>我们将会持续给出10道题目，如果能全部答对，你将获得冠军头衔，准备好了吗？</p>
-                    </div>
-                """, unsafe_allow_html=True)
-
+            with col2:
+                if st.button("开始吧"):
+                    st.session_state['start'] = 1
+                    st.rerun()
+                else:
+                    st.markdown("""
+                        <div style="text-align: center;">
+                            <p>我们将会持续给出10道题目，如果能全部答对，你将获得冠军头衔，准备好了吗？</p>
+                        </div>
+                    """, unsafe_allow_html=True)
 if __name__ == '__main__':
     main()
