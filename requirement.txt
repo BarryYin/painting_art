@@ -1,0 +1,12 @@
+streamlit
+streamlit-timeline
+streamlit-pills
+pandas 
+openpyxl
+streamlit_option_menu
+audiorecorder
+dwspark
+pydub
+pygame
+pages
+
