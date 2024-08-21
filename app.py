@@ -12,7 +12,7 @@ from vocie3 import process_text
 from test_web_api import talkwithboss
 from testimage import create_iamge
 from data_change import get_images_from_excel
-from LLM_xunfei2 import promptajust
+from LLM_xunfei2 import is_right,promptajust
 from streamlit_pills import pills
 from audiorecorder import audiorecorder
 from dwspark.models import Audio2Text
@@ -42,16 +42,21 @@ def get_question(n):
 
 def main():
 
-    selected2 = option_menu(None, ["法国绘画作品", "绘画故事", "绘画解读", '绘画风格', '获得证书'], 
-    icons=['house', 'cloud-upload', "list-task", 'gear', 'gear'], 
-    menu_icon="cast",  orientation="horizontal") #default_index=0,
+    selected2 = option_menu(None, ["艺术画廊", "画语新编", "大师对话", '绘梦成真', '画师认证'], 
+    icons=['house', 'pen', "people-fell", 'image', 'book'], 
+      orientation="horizontal") #default_index=0,menu_icon="cast",
     #selected2
-    
-    if selected2 == "法国绘画作品":
-        st.session_state.page = '法国绘画作品'
+
+    # selected2 = option_menu(None, ["Home", "Upload", "Tasks", 'Settings'], 
+    # icons=['house', 'cloud-upload', "list-task", 'gear'], 
+    # menu_icon="cast", default_index=0, orientation="horizontal")
+
+
+    if selected2 == "艺术画廊":
+        st.session_state.page = '艺术画廊'
         # 添加居中且加粗的标题
         # 添加居中且加粗的标题
-        st.markdown("<h1 style='text-align: center; font-weight: bold;'>法国绘画300年</h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='text-align: center; font-weight: bold;'>法国绘画300年特展</h1>", unsafe_allow_html=True)
         st.markdown("<h3 style='text-align: center; font-weight: normal;'>与AI一起学习法国绘画历史</h1>", unsafe_allow_html=True)
         st.markdown("<h3 style='text-align: center; font-weight: normal;'>欣赏名画、趣讲画作故事、与大师对话、模拟名画<br/></h1>", unsafe_allow_html=True)
         st.markdown("<h1 style='text-align: center; font-weight: bold;'></h1>", unsafe_allow_html=True)
@@ -104,11 +109,11 @@ def main():
         # render timeline
         timeline(data7, height=800)
     
-    elif selected2 == "绘画故事":
-        st.session_state.page = '绘画故事'
+    elif selected2 == "画语新编":
+        st.session_state.page = '画语新编'
         
-        st.markdown("<h1 style='text-align: center; font-weight: bold;'>法国绘画300年</h1>", unsafe_allow_html=True)
-        st.markdown("<h3 style='text-align: center; font-weight: normal;'>与AI一起学习法国绘画历史</h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='text-align: center; font-weight: bold;'>法国绘画300年特展</h1>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-weight: normal;'></h1>", unsafe_allow_html=True)
         st.markdown("<h3 style='text-align: center; font-weight: normal;'>选择一副名画，让AI重新解读，形成新的绘本故事<br/></h1>", unsafe_allow_html=True)
         st.markdown("<h1 style='text-align: center; font-weight: bold;'></h1>", unsafe_allow_html=True)
         # load data
@@ -208,8 +213,8 @@ def main():
                 st.write(st.session_state['story'])
             st.session_state['answer_01'] = False
     
-    elif selected2 == "绘画解读":
-        st.session_state.page = '绘画解读'
+    elif selected2 == "大师对话":
+        st.session_state.page = '大师对话'
         if "messages" not in st.session_state:
                         st.session_state["messages"] = []
         # # 假设有一个函数用于显示大师的界面
@@ -268,12 +273,12 @@ def main():
             st.session_state.messages.append({"role": "assistant", "content": msg})
             st.chat_message("assistant").write(msg)
 
-    elif selected2 == "绘画风格":
-        st.session_state.page = '绘画风格'
+    elif selected2 == "绘梦成真":
+        st.session_state.page = '绘梦成真'
 
 
-        st.markdown("<h1 style='text-align: center; font-weight: bold;'>法国绘画300年</h1>", unsafe_allow_html=True)
-        st.markdown("<h3 style='text-align: center; font-weight: normal;'>与AI一起学习法国绘画历史</h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='text-align: center; font-weight: bold;'>法国绘画300年特展</h1>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-weight: normal;'></h1>", unsafe_allow_html=True)
         st.markdown("<h3 style='text-align: center; font-weight: normal;'>输入你想要绘画的主题、选择绘画流派或者绘画大师分风格，AI模拟作画<br/></h1>", unsafe_allow_html=True)
         st.markdown("<h1 style='text-align: center; font-weight: bold;'></h1>", unsafe_allow_html=True)
         # load data
@@ -375,7 +380,7 @@ def main():
                         cols[j*2].image(row["imageURL"], width=display_width, caption=caption)
 
     else:
-        st.session_state.page = '获得证书'
+        st.session_state.page = '画师认证-获得证书'
 
         def get_image_base64(image_path):
             with open(image_path, "rb") as image_file:
@@ -388,7 +393,7 @@ def main():
         st.markdown("<h1 style='text-align: center; font-weight: bold;'></h1>", unsafe_allow_html=True)
 
         # 获取图片的 Base64 编码字符串
-        image_base64 = get_image_base64("standing.jpeg")
+        image_base64 = get_image_base64("111.jpeg")
 
         # col1, col2, col3 = st.columns([1,2,1])  # 调整比例以更好地居中
         # with col2:
@@ -455,40 +460,44 @@ def main():
                                 <h4>语音答题请点击</h4>
                             </div>
                         """, unsafe_allow_html=True)
-                        audio = audiorecorder("开始答题", "结束答题")
-                        if len(audio) > 0:
-                            # To play audio in frontend:
-                            st.audio(audio.export().read())
-                            audio.export("output_audio.mp3", format="mp3")
-                            filename = "output_audio.mp3"
-                            new_filename = modify_mp3_file(filename)
-                            a2t = Audio2Text(config)
-                            # 对生成上锁，预防公有变量出现事务问题，但会降低程序并发性能。
-                            audio_text = a2t.gen_text(new_filename)
-                            #logger.info(audio_text)
-                            print(audio_text)
-                            voice_answer = audio_text
+                        with st.container():
+                        # 使用 columns 方法在容器内创建两列
+                            col1, col2 = st.columns([1, 2])  # 第一列的宽度为1，第二列的宽度为2
+                            with col2:
+                                audio = audiorecorder("开始答题", "结束答题")
+                                if len(audio) > 0:
+                                    # To play audio in frontend:
+                                    st.audio(audio.export().read())
+                                    audio.export("output_audio.mp3", format="mp3")
+                                    filename = "output_audio.mp3"
+                                    new_filename = modify_mp3_file(filename)
+                                    a2t = Audio2Text(config)
+                                    # 对生成上锁，预防公有变量出现事务问题，但会降低程序并发性能。
+                                    audio_text = a2t.gen_text(new_filename)
+                                    #logger.info(audio_text)
+                                    print(audio_text)
+                                    voice_answer = audio_text
+                                            
+                                    st.write(voice_answer)
+                                    st.session_state['flag_answer'] = voice_answer
                                     
-                            st.write(voice_answer)
-                            st.session_state['flag_answer'] = voice_answer
-                            
-                        if st.button('提交答案'):
-                            print(st.session_state['answer'])
-                            print(answer)
-                            matches = is_right(st.session_state['answer'],answer)
-                            if matches == '1':
-                                st.write("答对了")
-                                process_text("哦，答对了，加油哦，下一题")
-                                st.session_state['voice_triggered'] = True
-                                st.session_state['n'] += 1  # 答对了，计数器加1
-                                if st.session_state['n'] >= 10:
-                                    st.session_state['is_win'] = 1
-                                st.rerun()
-                            else:
-                                st.write("出局")
-                                process_text("哦，失败了，就差一点点了")
-                                st.session_state['is_win'] = 2
-                                st.rerun()
+                                if st.button('提交答案'):
+                                    print(st.session_state['answer'])
+                                    print(answer)
+                                    matches = is_right(st.session_state['answer'],answer)
+                                    if matches == '1':
+                                        st.write("答对了")
+                                        process_text("哦，答对了，加油哦，下一题")
+                                        st.session_state['voice_triggered'] = True
+                                        st.session_state['n'] += 1  # 答对了，计数器加1
+                                        if st.session_state['n'] >= 10:
+                                            st.session_state['is_win'] = 1
+                                        st.rerun()
+                                    else:
+                                        st.write("出局")
+                                        process_text("哦，失败了，就差一点点了")
+                                        st.session_state['is_win'] = 2
+                                        st.rerun()
 
                     if input := st.chat_input("你也可以输入答案"):
                         st.session_state['answer'] = input
@@ -513,18 +522,25 @@ def main():
                     
             
         else:
-            col1, col2, col3 = st.columns([1,2,1])  # 调整比例以更好地居中
+            if 'clicked' not in st.session_state:
+                st.session_state.clicked = False
 
-            # 在中间列显示图像
-            with col2:
-                if st.button("开始吧"):
-                    st.session_state['start'] = 1
-                    st.rerun()
-                else:
-                    st.markdown("""
+            def click_button():
+                st.session_state.clicked = True
+            with st.container():
+                col1, col2, col3 = st.columns([3,1,3])  # 调整比例以更好地居中
+                with col2:
+                    st.button('开始', on_click=click_button)
+
+            if not st.session_state.clicked:
+                st.markdown("""
                         <div style="text-align: center;">
                             <p>我们将会持续给出10道题目，如果能全部答对，你将获得冠军头衔，准备好了吗？</p>
                         </div>
                     """, unsafe_allow_html=True)
+            else:
+                st.session_state['start'] = 1
+                st.rerun()
+                
 if __name__ == '__main__':
     main()
