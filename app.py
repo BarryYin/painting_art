@@ -247,31 +247,32 @@ def main():
         # 初始化对话状态
         if 'userinput' not in st.session_state:
             st.session_state['userinput'] = 0 # 默认与莫奈对话
-
-        with st.sidebar:
-            # 创建侧边栏
-            st.sidebar.title("大师列表")
-            # 创建侧边栏单选按钮以选择大师
-            current_master = st.sidebar.radio("选择一位大师进行对话", masters)
+            
+        # 两栏布局，1比2
+        sidebar, content = st.columns([1, 2], vertical_alignment="top")
+        
+        with sidebar:
+            sidebar.header("大师列表")
+            current_master = sidebar.radio("选择一位大师进行对话", masters)
             # 更新 session_state 中的当前大师
             st.session_state['current_master'] = current_master 
             # 显示当前选择的大师的图片
             st.image(master_images[current_master], width=280)
 
-        
-        st.subheader("当前对话" + st.session_state['current_master'])
-        st.write("你好，我是"+st.session_state['current_master']+"，很高兴能和你对话")
-        for msg in st.session_state.messages:
+        with content:
+            st.subheader("当前对话" + st.session_state['current_master'])
+            st.write("你好，我是"+st.session_state['current_master']+"，很高兴能和你对话")
+            for msg in st.session_state.messages:
                 st.chat_message(msg["role"]).write(msg["content"])
 
-        # 原有的聊天逻辑
-        if prompt := st.chat_input():
-            st.chat_message("user").write(prompt)
-            st.session_state['userinput'] = st.session_state['userinput'] + 1
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            msg = talkwithboss(st.session_state['current_master'],prompt)
-            st.session_state.messages.append({"role": "assistant", "content": msg})
-            st.chat_message("assistant").write(msg)
+            # 原有的聊天逻辑
+            if prompt := st.chat_input():
+                st.chat_message("user").write(prompt)
+                st.session_state['userinput'] = st.session_state['userinput'] + 1
+                st.session_state.messages.append({"role": "user", "content": prompt})
+                msg = talkwithboss(st.session_state['current_master'],prompt)
+                st.session_state.messages.append({"role": "assistant", "content": msg})
+                st.chat_message("assistant").write(msg)
 
     elif selected2 == "绘梦成真":
         st.session_state.page = '绘梦成真'
