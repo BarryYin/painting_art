@@ -56,11 +56,13 @@ def main():
         st.session_state.page = '艺术画廊'
         # 添加居中且加粗的标题
         # 添加居中且加粗的标题
-        st.markdown("<h1 style='text-align: center; font-weight: bold;'>法国绘画300年特展</h1>", unsafe_allow_html=True)
-        st.markdown("<h3 style='text-align: center; font-weight: normal;'>与AI一起学习法国绘画历史</h1>", unsafe_allow_html=True)
-        st.markdown("<h3 style='text-align: center; font-weight: normal;'>欣赏名画、趣讲画作故事、与大师对话、模拟名画<br/></h1>", unsafe_allow_html=True)
-        st.markdown("<h1 style='text-align: center; font-weight: bold;'></h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='text-align: center; font-weight: bold;'>法绘华章 -- 法国三百年绘画展</h1>", unsafe_allow_html=True)
+        #st.markdown("<h1 style='text-align: center; font-weight: bold;'>法国三百年绘画经典作品展</h1>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-weight: normal;'>第九届上海图书馆开放数据竞赛作品</h1>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-weight: normal;'>献礼中法建交60周年</h1>", unsafe_allow_html=True)
         # load data
+        # 绘制一条横线
+        st.markdown("---")
         with open('example1.json', "r") as f:
             data1 = f.read()
 
@@ -112,10 +114,11 @@ def main():
     elif selected2 == "画语新编":
         st.session_state.page = '画语新编'
         
-        st.markdown("<h1 style='text-align: center; font-weight: bold;'>法国绘画300年特展</h1>", unsafe_allow_html=True)
-        st.markdown("<h3 style='text-align: center; font-weight: normal;'></h1>", unsafe_allow_html=True)
-        st.markdown("<h3 style='text-align: center; font-weight: normal;'>选择一副名画，让AI重新解读，形成新的绘本故事<br/></h1>", unsafe_allow_html=True)
-        st.markdown("<h1 style='text-align: center; font-weight: bold;'></h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='text-align: center; font-weight: bold;'>画语新编</h1>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-weight: normal;'>法国名画新解读</h1>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-weight: normal;'>选择一副名画，进行AI解读创作，形成新的绘本故事</h1>", unsafe_allow_html=True)
+        # 绘制一条横线
+        st.markdown("---")
         # load data
 
         if 'question_1' not in st.session_state:
@@ -275,12 +278,11 @@ def main():
 
     elif selected2 == "绘梦成真":
         st.session_state.page = '绘梦成真'
-
-
-        st.markdown("<h1 style='text-align: center; font-weight: bold;'>法国绘画300年特展</h1>", unsafe_allow_html=True)
-        st.markdown("<h3 style='text-align: center; font-weight: normal;'></h1>", unsafe_allow_html=True)
-        st.markdown("<h3 style='text-align: center; font-weight: normal;'>输入你想要绘画的主题、选择绘画流派或者绘画大师分风格，AI模拟作画<br/></h1>", unsafe_allow_html=True)
-        st.markdown("<h1 style='text-align: center; font-weight: bold;'></h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='text-align: center; font-weight: bold;'>绘梦成真</h1>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-weight: normal;'>向大师学习绘画</h1>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-weight: normal;'>选择绘画流派或者大师分风格，使用AI作画</h1>", unsafe_allow_html=True)
+        # 绘制一条横线
+        st.markdown("---")
         # load data
 
         # 创建左右两列
@@ -387,11 +389,10 @@ def main():
                 return base64.b64encode(image_file.read()).decode()
 
 
-        st.markdown("<h1 style='text-align: center; font-weight: bold;'>法国绘画300年特展</h1>", unsafe_allow_html=True)
-        st.markdown("<h3 style='text-align: center; font-weight: normal;'></h1>", unsafe_allow_html=True)
-        st.markdown("<h3 style='text-align: center; font-weight: normal;'>回答对10道题，可以获得证书<br/></h1>", unsafe_allow_html=True)
-        st.markdown("<h1 style='text-align: center; font-weight: bold;'></h1>", unsafe_allow_html=True)
-
+        st.markdown("<h1 style='text-align: center; font-weight: bold;'>画师认证</h1>", unsafe_allow_html=True)
+        st.markdown("<h3 style='text-align: center; font-weight: normal;'>回答对10道题，可以获得证书</h1>", unsafe_allow_html=True)
+        # 绘制一条横线
+        st.markdown("---")
         # 获取图片的 Base64 编码字符串
         image_base64 = get_image_base64("111.jpeg")
 
@@ -541,6 +542,6 @@ def main():
             else:
                 st.session_state['start'] = 1
                 st.rerun()
-                
+
 if __name__ == '__main__':
     main()
