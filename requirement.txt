@@ -9,4 +9,6 @@ dwspark
 pydub
 pygame
 pages
+openai
+asyncio
 

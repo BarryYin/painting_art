@@ -1,5 +1,5 @@
 import streamlit as st
-from LLM_xunfei2 import llm_write,Core_tex,draw,Org_tex
+from LLM_unified import llm_write,Core_tex,draw,Org_tex
 from data_change import query_drawing_data
 import pandas as pd
 from vocie3 import process_text

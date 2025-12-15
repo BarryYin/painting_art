@@ -1,7 +1,7 @@
 import streamlit as st
 from testimage import create_iamge
 from data_change import get_images_from_excel
-from LLM_xunfei2 import promptajust
+from LLM_unified import promptajust
 from streamlit_pills import pills
 
 if 'prompt_image' not in st.session_state:

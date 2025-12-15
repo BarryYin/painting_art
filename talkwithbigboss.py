@@ -1,9 +1,9 @@
 import streamlit as st
-from LLM_xunfei2 import llm_write,Core_tex,draw,Org_tex,bosssay
+from LLM_unified import llm_write,Core_tex,draw,Org_tex,bosssay
 from data_change import query_drawing_data
 import pandas as pd
 from vocie3 import process_text
-from test_web_api import talkwithboss
+from artist_chat_unified import talkwithboss
 
 st.set_page_config(page_title='和大师对话', page_icon=' ', layout='wide')
 

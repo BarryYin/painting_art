@@ -1,5 +1,5 @@
 import streamlit as st
-from LLM_xunfei2 import llm_write,Core_tex,draw
+from LLM_unified import llm_write,Core_tex,draw
 
 # 创建一个文本输入框，让用户输入一些文本
 user_input = st.text_input("请输入一些内容：")

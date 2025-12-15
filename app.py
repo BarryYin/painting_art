@@ -5,14 +5,13 @@ from streamlit_timeline import timeline
 from streamlit_option_menu import option_menu
 import pages as pgs
 from vocie3 import process_text
-from LLM_xunfei2 import llm_write,Core_tex,draw,Org_tex,bosssay
+from LLM_unified import llm_write,Core_tex,draw,Org_tex,bosssay,is_right,promptajust
 from data_change import query_drawing_data
 import pandas as pd
 from vocie3 import process_text
-from test_web_api import talkwithboss
+from artist_chat_unified import talkwithboss
 from testimage import create_iamge
 from data_change import get_images_from_excel
-from LLM_xunfei2 import is_right,promptajust
 from streamlit_pills import pills
 from audiorecorder import audiorecorder
 from dwspark.models import Audio2Text
