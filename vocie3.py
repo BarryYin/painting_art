@@ -6,7 +6,7 @@ from dwspark.config import Config
 from datetime import datetime
 
 
-config = Config('3a115b20', '9d1b7a738c3e63a79656df4222d12cef','ZGMyMzA3MGFlM2MzM2UxZWE1YTJhYjgw')
+from xunfei_config import xunfei_config as config
 # SDK引入模型
 from dwspark.models import ChatModel, Text2Img, ImageUnderstanding, Text2Audio, Audio2Text, EmebddingModel
 

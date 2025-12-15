@@ -3,8 +3,10 @@ import asyncio
 from openai import AsyncOpenAI
 
 # 百度ERNIE模型的配置
-BAIDU_API_KEY = "bce-v3/ALTAK-IlAGWrpPIFAMJ3g8kbD4I/f17c0a909b891c89b0dce53d913448d86a87bad9"
-BAIDU_BASE_URL = "https://qianfan.baidubce.com/v2"
+from config import Config
+
+BAIDU_API_KEY = Config.BAIDU_API_KEY
+BAIDU_BASE_URL = Config.BAIDU_BASE_URL
 
 # 要测试的ERNIE模型列表
 MODELS_TO_TEST = [

@@ -54,9 +54,11 @@ import re
 # SPARKAI_APP_ID = 'e6950ae6'
 # SPARKAI_API_SECRET = 'NzRkOWNlZDUzZThjMDI5NzI0N2EyMGRh'
 # SPARKAI_API_KEY = 'f2d4b9650c13355fc8286ac3fc34bf6e'
-SPARKAI_APP_ID = '3a115b20'
-SPARKAI_API_SECRET = 'ZGMyMzA3MGFlM2MzM2UxZWE1YTJhYjgw'
-SPARKAI_API_KEY = '9d1b7a738c3e63a79656df4222d12cef'
+from config import Config
+
+SPARKAI_APP_ID = Config.XUNFEI_APP_ID
+SPARKAI_API_SECRET = Config.XUNFEI_API_SECRET
+SPARKAI_API_KEY = Config.XUNFEI_API_KEY
 #星火认知大模型Spark Max的domain值，其他版本大模型domain值请前往文档（https://www.xfyun.cn/doc/spark/Web.html）查看
 SPARKAI_DOMAIN = 'generalv3.5'
 

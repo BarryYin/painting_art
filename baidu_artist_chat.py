@@ -10,8 +10,9 @@ import re
 class BaiduArtistChat:
     def __init__(self, api_key=None, base_url=None, model="ernie-4.5-turbo-32k"):
         """初始化百度艺术家对话"""
-        self.api_key = api_key or "bce-v3/ALTAK-IlAGWrpPIFAMJ3g8kbD4I/f17c0a909b891c89b0dce53d913448d86a87bad9"
-        self.base_url = base_url or "https://qianfan.baidubce.com/v2"
+        from config import Config
+        self.api_key = api_key or Config.BAIDU_API_KEY
+        self.base_url = base_url or Config.BAIDU_BASE_URL
         self.model = model
         self.client = AsyncOpenAI(api_key=self.api_key, base_url=self.base_url)
         

@@ -23,7 +23,7 @@ from datetime import datetime
 import time
 
 # 加载系统环境变量：SPARKAI_APP_ID、SPARKAI_API_KEY、SPARKAI_API_SECRET
-config = Config('3a115b20', '9d1b7a738c3e63a79656df4222d12cef','ZGMyMzA3MGFlM2MzM2UxZWE1YTJhYjgw')
+from xunfei_config import xunfei_config as config
 
 st.set_page_config(page_title="法国绘画展-瓦力AI解读", layout="wide")
 

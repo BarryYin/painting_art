@@ -14,9 +14,11 @@ e6950ae6
 #SPARKAI_URL = 'wss://spark-api.xf-yun.com/v3.5/chat'  ub9erzzhewq   
 SPARKAI_URL =   'wss://spark-openapi.cn-huabei-1.xf-yun.com/v1/assistants/ub9erzzhewqn_v1'
 #星火认知大模型调用秘钥信息，请前往讯飞开放平台控制台（https://console.xfyun.cn/services/bm35）查看
-SPARKAI_APP_ID = 'e6950ae6'  # 2265351
-SPARKAI_API_SECRET = 'NzRkOWNlZDUzZThjMDI5NzI0N2EyMGRh'
-SPARKAI_API_KEY = 'f2d4b9650c13355fc8286ac3fc34bf6e'
+from config import Config
+
+SPARKAI_APP_ID = Config.XUNFEI_APP_ID
+SPARKAI_API_SECRET = Config.XUNFEI_API_SECRET
+SPARKAI_API_KEY = Config.XUNFEI_API_KEY
 #星火认知大模型Spark Max的domain值，其他版本大模型domain值请前往文档（https://www.xfyun.cn/doc/spark/Web.html）查看
 #SPARKAI_DOMAIN = 'generalv3.5'
 SPARKAI_DOMAIN = 'generalv3.5'

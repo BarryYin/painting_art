@@ -10,5 +10,5 @@ pydub
 pygame
 pages
 openai
-asyncio
+python-dotenv
 

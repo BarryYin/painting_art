@@ -7,7 +7,7 @@ from modify_mp3 import modify_mp3_file
 from dwspark.config import Config
 
  # 加载系统环境变量：SPARKAI_APP_ID、SPARKAI_API_KEY、SPARKAI_API_SECRET
-config = Config('3a115b20', '9d1b7a738c3e63a79656df4222d12cef','ZGMyMzA3MGFlM2MzM2UxZWE1YTJhYjgw')
+from xunfei_config import xunfei_config as config
 
 def get_question(n):
     # 假设我们有一个包含问题及其答案的列表
